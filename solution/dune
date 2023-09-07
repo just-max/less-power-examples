@@ -1,0 +1,5 @@
+(library
+ (name solution)
+ (libraries overrides)
+ (flags
+  (:standard -open Overrides.Stdlib -nopervasives)))
