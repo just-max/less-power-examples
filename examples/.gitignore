@@ -1,0 +1,9 @@
+# OUnit log and cache files
+/*/oUnit*.log
+/*/oUnit*.cache
+
+# JUnit XML test reports
+/*/test-reports/*.xml
+
+# generated assignment/ directories
+/*/assignment/
