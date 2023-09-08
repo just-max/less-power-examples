@@ -34,4 +34,6 @@ For trying out the examples and developing new exercises, the example exercises 
 
 2. Start the testing process by running `tests/run.sh`.
 
+3. The results are printed to standard error, and saved to `test-reports/results.xml`. With `xmlstarlet` installed (debian: `apt install xmlstarlet`), the script `dump-test-reports.sh` pretty-prints the test results similar to how a student would see them.
+
 During real courses, automated programming exercises are generally run with the help of a continuous integration service. With Artemis, the directory layout matches the one expected by the framework.
