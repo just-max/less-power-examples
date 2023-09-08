@@ -1,15 +1,26 @@
-type vector3 = float * float * float
+(* Students are still given an interface file, but it will be ignored.
 
-val p1 : vector3
+   To be exact: the .mli files submitted by the student are always ignored,
+   but usually the tests just check against the exact same interface
+   (in tests/assignment/assignment.mli). *)
 
-val p2 : vector3
+module type Stack = sig
+  type 'a t
 
-val p3 : vector3
+  val empty : 'a t
+  val push : 'a -> 'a t -> 'a t
+  val pop : 'a t -> ('a * 'a t) option
+end
 
-val string_of_vector3 : vector3 -> string
+module type Queue = sig
+  type 'a t
 
-val vector3_add : vector3 -> vector3 -> vector3
+  val empty : 'a t
+  val enqueue : 'a -> 'a t -> 'a t
+  val dequeue : 'a t -> ('a * 'a t) option
+end
 
-val vector3_max : vector3 -> vector3 -> vector3
+module ListStack : Stack with type 'a t = 'a list
 
-val combine : vector3 -> vector3 -> vector3 -> string
+module MakeFunctionalQueue : functor (S : Stack) ->
+  Queue with type 'a t = 'a S.t * 'a S.t
