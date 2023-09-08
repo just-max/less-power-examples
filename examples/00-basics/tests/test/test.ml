@@ -43,8 +43,9 @@ open Test_lib
 (* Property for [Define three points] *)
 let p123_differ_prop (p1, p2, p3) =
   if List.length (List.sort_uniq compare [p1; p2; p3]) <> 3 then
-    (* we prefer to explicitly fail the test, to show a more detailed error message *)
-    QCheck2.Test.fail_report "All three vectors (p1, p2, and p3) should be different.";
+    (* we prefer to explicitly fail the test, as to show a more detailed error message *)
+    QCheck_util.fail_report_notrace
+      "All three vectors (p1, p2, and p3) should be different.";
   true
 
 (* Property for [string_of_vector3] *)
