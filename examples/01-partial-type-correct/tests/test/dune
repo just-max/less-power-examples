@@ -1,0 +1,12 @@
+(executable
+ (name test)
+ (libraries
+  less-power.test-lib
+  ounit2
+  ounit2.advanced
+  qcheck-core
+  str
+  assignment
+  solution
+  overrides
+  unix))
