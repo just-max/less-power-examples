@@ -42,7 +42,10 @@ open Test_lib
 
 (* Property for [Define three points] *)
 let p123_differ_prop (p1, p2, p3) =
-  List.length (List.sort_uniq compare [p1; p2; p3]) = 3
+  if List.length (List.sort_uniq compare [p1; p2; p3]) <> 3 then
+    (* we prefer to explicitly fail the test, to show a more detailed error message *)
+    QCheck2.Test.fail_report "All three vectors (p1, p2, and p3) should be different.";
+  true
 
 (* Property for [string_of_vector3] *)
 let string_of_vector3_prop v =
@@ -112,38 +115,46 @@ let vector3_gen = QCheck2.Gen.(triple float float float)
 let vector3_pair_gen = QCheck2.Gen.(pair vector3_gen vector3_gen)
 let vector3_triple_gen = QCheck2.Gen.(triple vector3_gen vector3_gen vector3_gen)
 
+let vector3_print = Solution.string_of_vector3
+let vector3_pair_print = QCheck2.Print.pair vector3_print vector3_print
+let vector3_triple_print = QCheck2.Print.triple vector3_print vector3_print vector3_print
+
 
 (* Tests: Now, we can create tests that check the
    student code against the properties. *)
 
-(* TODO: move to lib *)
-let make_test_single ?name ?print x prop =
-  QCheck2.Test.make (QCheck2.Gen.pure x) prop ~count:1 ~max_gen:1 ?name ?print
-
+(* some tests only check a property against fixed input... *)
 let p123_differ_test =
-  make_test_single ~name:"p1, p2, p3" Assignment.(p1, p2, p3) p123_differ_prop
+  QCheck_util.make_test_single ~name:"p1_p2_p3"
+    ~print:vector3_triple_print
+    Assignment.(p1, p2, p3) p123_differ_prop
 
+(* ...while others use randomly generated inputs *)
 let string_of_vector3_test =
   QCheck2.Test.make ~name:"string_of_vector3" ~count:1000
-    ~print:Solution.string_of_vector3
+    ~print:vector3_print
     vector3_gen string_of_vector3_prop
 
 let vector3_add_test =
   QCheck2.Test.make ~name:"vector3_add" ~count:1000
-    ~print:(QCheck2.Print.pair Solution.string_of_vector3 Solution.string_of_vector3) (* TODO: printers *)
+    ~print:vector3_pair_print
     vector3_pair_gen vector3_add_prop
 
 let vector3_max_test =
   QCheck2.Test.make ~name:"vector3_max" ~count:1000
-    ~print:(QCheck2.Print.pair Solution.string_of_vector3 Solution.string_of_vector3) (* TODO: printers *)
+    ~print:vector3_pair_print
     vector3_pair_gen vector3_max_prop
 
 let vector3_combine_test =
   QCheck2.Test.make ~name:"combine" ~count:1000
-    ~print:(QCheck2.Print.triple Solution.string_of_vector3 Solution.string_of_vector3 Solution.string_of_vector3) (* TODO: printers *)
+    ~print:vector3_triple_print
     vector3_triple_gen combine_prop
 
-(* TODO: fixed tests, hidden tests *)
+(* We check the value of Config.show_hidden to decide whether
+   the output of some tests should be hidden. Config.show_hidden becomes true
+   when running tests locally, or after the deadline has passed. *)
+let hide_test ?visibility t =
+  if Config.show_hidden then t else OUnit_util.hide_test ?visibility t
 
 (* Finally, create a test tree, and run it. *)
 let tests =
@@ -152,8 +163,13 @@ let tests =
     p123_differ_test |> of_qcheck ;
     string_of_vector3_test |> of_qcheck ;
     vector3_add_test |> of_qcheck ;
-    vector3_max_test |> of_qcheck ;
-    vector3_combine_test |> of_qcheck ;
+
+    (* we can mark some tests as hidden: with 'PassFail', only a pass/fail
+       status will be shown to the student *)
+    vector3_max_test |> of_qcheck |> hide_test ~visibility:PassFail ;
+
+    (* with 'None', the test won't be run at all *)
+    vector3_combine_test |> of_qcheck |> hide_test ~visibility:None ;
   ]
 
 (* We only actually run tests when arguments are passed, to be able to check
