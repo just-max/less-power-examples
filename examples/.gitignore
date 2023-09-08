@@ -5,5 +5,5 @@
 # JUnit XML test reports
 /*/test-reports/*.xml
 
-# generated assignment/ directories
-/*/assignment/
+# generated assignment symlinks
+/*/assignment
