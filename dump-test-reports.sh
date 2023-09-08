@@ -8,4 +8,4 @@ xmlstarlet select --text --template \
       --value-of '.' --nl \
     --break \
     --output '----------------------------------------' --nl \
-    test-reports/results.xml
+    test-reports/*.xml
