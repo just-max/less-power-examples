@@ -1,23 +1,52 @@
-type vector3 = float * float * float
+(** sample solution *)
 
-(* the exact values don't matter, but when testing your solutions make sure to test edge cases! *)
+module type Stack = sig
+  type 'a t
 
-let p1 = (-2.5, 5.0, 0.2)
+  val empty : 'a t
+  val push : 'a -> 'a t -> 'a t
+  val pop : 'a t -> ('a * 'a t) option
+end
 
-let p2 = (0.0, 0.0, 13.1)
+module type Queue = sig
+  type 'a t
 
-let p3 = (5.4, -8.2, 1.0)
+  val empty : 'a t
+  val enqueue : 'a -> 'a t -> 'a t
+  val dequeue : 'a t -> ('a * 'a t) option
+end
 
-let string_of_vector3 (x, y, z) =
-  "(" ^ string_of_float x ^ "," ^ string_of_float y ^ "," ^ string_of_float z ^ ")"
+module ListStack = struct
+  type 'a t = 'a list
 
-let vector3_add (x1, y1, z1) (x2, y2, z2) = (x1 +. x2, y1 +. y2, z1 +. z2)
+  let empty = []
+  let push = List.cons
+  let pop = function [] -> None | x :: xs -> Some (x, xs)
+end
 
-let vector3_max (x1, y1, z1) (x2, y2, z2) =
-  if
-    (x1 *. x1) +. (y1 *. y1) +. (z1 *. z1)
-    > (x2 *. x2) +. (y2 *. y2) +. (z2 *. z2)
-  then (x1, y1, z1)
-  else (x2, y2, z2)
+module MakeFunctionalQueue =
+functor
+  (S : Stack)
+  ->
+  struct
+    type 'a t = 'a S.t * 'a S.t
 
-let combine a b c = string_of_vector3 (vector3_add a (vector3_max b c))
+    let rev s =
+      let rec helper acc xs =
+        match S.pop xs with
+        | None -> acc
+        | Some (x, xs') -> helper (S.push x acc) xs'
+      in
+      helper S.empty s
+
+    let empty = (S.empty, S.empty)
+    let enqueue x (xs, ys) = (xs, S.push x ys)
+
+    let dequeue (xs, ys) =
+      match S.pop xs with
+      | Some (x, xs') -> Some (x, (xs', ys))
+      | None -> (
+          match S.pop (rev ys) with
+          | Some (y, ys') -> Some (y, (ys', S.empty))
+          | None -> None)
+  end
