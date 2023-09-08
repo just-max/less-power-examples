@@ -1,5 +1,5 @@
 (library
  (name solution)
- (libraries overrides)
+ (libraries overrides less-power.stdlib-variants)
  (flags
   (:standard -open Overrides.Stdlib -nopervasives)))

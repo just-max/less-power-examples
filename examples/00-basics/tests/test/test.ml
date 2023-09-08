@@ -153,7 +153,7 @@ let vector3_combine_test =
 (* We check the value of Config.show_hidden to decide whether
    the output of some tests should be hidden. Config.show_hidden becomes true
    when running tests locally, or after the deadline has passed. *)
-let hide_test ?visibility t =
+let hide_test' ?visibility t =
   if Config.show_hidden then t else OUnit_util.hide_test ?visibility t
 
 (* Finally, create a test tree, and run it. *)
@@ -166,10 +166,10 @@ let tests =
 
     (* we can mark some tests as hidden: with 'PassFail', only a pass/fail
        status will be shown to the student *)
-    vector3_max_test |> of_qcheck |> hide_test ~visibility:PassFail ;
+    vector3_max_test |> of_qcheck |> hide_test' ~visibility:PassFail ;
 
     (* with 'None', the test won't be run at all *)
-    vector3_combine_test |> of_qcheck |> hide_test ~visibility:None ;
+    vector3_combine_test |> of_qcheck |> hide_test' ~visibility:None ;
   ]
 
 (* We only actually run tests when arguments are passed, to be able to check
