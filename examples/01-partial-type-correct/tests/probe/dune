@@ -1,0 +1,11 @@
+(library
+ (name probe_common)
+ (modules (:standard \ probe_defs)))
+
+; the probe_defs library is never build;
+; it serves only to help develop the probe definitions
+(library
+ (name probe_defs)
+ (modules ("probe_defs"))
+ (flags (:standard -w -32-34))
+ (libraries probe_common assignment))

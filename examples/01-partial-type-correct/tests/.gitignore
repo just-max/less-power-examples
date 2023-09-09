@@ -35,3 +35,5 @@ _opam/
 /solution/*.ml
 /assignment/*.ml
 /test/config.ml
+/probe-data/
+/.probe-args

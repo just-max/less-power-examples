@@ -1,5 +1,8 @@
 (executable
  (name test)
+ (preprocess
+  (action
+   (run %{bin:cppo} %{read-lines:../.probe-args} %{input-file})))
  (libraries
   less-power.test-lib
   ounit2
