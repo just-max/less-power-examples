@@ -2,6 +2,8 @@
 
 This exercise showcases a strategy for grading submissions that would otherwise not compile, because some values, types, or modules are left undefined by the student, or are defined but have the wrong type.
 
+The implementation of partial signature checks requires Cppo, a C-like preprocessor. Install it with `opam install cppo`. The docker image already contains Cppo.
+
 ## Problem Statement
 
 The problem statement for this exercise is as follows.
