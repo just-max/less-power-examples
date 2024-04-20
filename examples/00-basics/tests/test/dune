@@ -1,5 +1,6 @@
 (executable
  (name test)
+ (modules (:standard \ process_results))
  (libraries
   less-power.test-lib
   ounit2
@@ -10,3 +11,8 @@
   solution
   overrides
   unix))
+
+(executable
+ (name process_results)
+ (modules process_results)
+ (libraries less-power.test-lib))

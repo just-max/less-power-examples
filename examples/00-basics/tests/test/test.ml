@@ -149,6 +149,5 @@ let tests =
 (* We only actually run tests when arguments are passed, to be able to check
    for top-level loops in student code by passing no arguments. *)
 let _ =
-  if Array.length Sys.argv > 1 then (
-    run_test_tt_main ~exit:(Fun.const ()) tests;
-    Grading.prettify_results Sys.argv.(2))
+  if Array.length Sys.argv > 1 then
+    run_test_tt_main ~exit:(Fun.const ()) tests
