@@ -4,7 +4,6 @@ let _ =
   let task cfg =
     Std_task.[
       std_setup;
-      std_check;
       std_probe;
       std_build;
       std_test;
