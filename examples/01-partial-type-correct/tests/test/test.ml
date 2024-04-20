@@ -70,41 +70,7 @@ let tests =
     ]
   ]
 
-let skip_not_ok ok = if not ok then Some Scaffold.ud_typ_message else None
-let skip_not_ok_reason ok _ _ = skip_not_ok ok
-
-(* for automatic grading, use the Grading module *)
-let grading =
-  let open Grading in
-  group "root" ~max_points:{ min = 0; max = 15 }
-    [
-      group "ListStack" ?skip:(skip_not_ok LIST_MOD_OK) ~max_points:{ min = 0; max = 6 }
-        [
-          points_p "type t" 1 "*:core:*:ListStack:*:t:"
-            ~reason:(skip_not_ok_reason LIST_T_OK);
-          points_p "empty" 1 "*:core:*:ListStack:*:empty:"
-            ~reason:(skip_not_ok_reason LIST_EMPTY_OK);
-          points_p "push" 2 "*:core:*:ListStack:*:push:"
-            ~reason:(skip_not_ok_reason LIST_PUSH_OK);
-          points_p "pop" 2 "*:core:*:ListStack:*:pop:"
-            ~reason:(skip_not_ok_reason LIST_POP_OK);
-        ];
-      group "MakeFunctionalQueue" ?skip:(skip_not_ok FQUEUE_FUNCT_OK) ~max_points:{ min = 0; max = 9 }
-        [
-          points_p "type t" 2 "*:core:*:MakeFunctionalQueue:*:t:"
-            ~reason:(skip_not_ok_reason FQUEUE_T_OK);
-          points_p "empty" 1 "*:core:*:MakeFunctionalQueue:*:empty:"
-            ~reason:(skip_not_ok_reason FQUEUE_EMPTY_OK);
-          points_p "enqueue" 2 "*:core:*:MakeFunctionalQueue:*:enqueue:"
-            ~reason:(skip_not_ok_reason FQUEUE_ENQUEUE_OK);
-          points_p "dequeue" 4 "*:core:*:MakeFunctionalQueue:*:dequeue:"
-            ~reason:(skip_not_ok_reason FQUEUE_DEQUEUE_OK);
-        ];
-    ]
-
 (* We only actually run tests when arguments are passed, to be able to check
    for top-level loops in student code by passing no arguments. *)
-let _ =
-  if Array.length Sys.argv > 1 then (
-    OUnit2.run_test_tt_main ~exit:(Fun.const ()) tests;
-    Grading.prettify_results ~grading Sys.argv.(2))
+let _ = if Array.length Sys.argv > 1 then
+  OUnit2.run_test_tt_main ~exit:(Fun.const ()) tests

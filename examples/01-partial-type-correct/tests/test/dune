@@ -1,15 +1,30 @@
-(executable
- (name test)
+(library
+ (name scaffold)
+ (modules scaffold)
+ (libraries assignment solution)
  (preprocess
   (action
-   (run %{bin:cppo} %{read-lines:../.probe-args} %{input-file})))
+   (run %{bin:cppo} %{read-lines:../.probe-args} %{input-file}))))
+
+(executable
+ (name test)
+ (modules
+  (:standard \ scaffold process_results))
  (libraries
+  scaffold
+  solution
   less-power.test-lib
   ounit2
   ounit2.advanced
-  qcheck-core
-  str
-  assignment
-  solution
-  overrides
-  unix))
+  qcheck-core)
+ (preprocess
+  (action
+   (run %{bin:cppo} %{read-lines:../.probe-args} %{input-file}))))
+
+(executable
+ (name process_results)
+ (modules process_results)
+ (libraries scaffold less-power.test-lib)
+ (preprocess
+  (action
+   (run %{bin:cppo} %{read-lines:../.probe-args} %{input-file}))))
