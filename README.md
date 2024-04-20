@@ -18,7 +18,7 @@ Typically, each would live in a separate repository.
 
 ## Running the examples
 
-The examples depend on the Less Power framework being installed. LP is currently fixed to OCaml 5.0.0. Hence, from an OCaml 5.0.0. switch, LP can be installed using opam:
+The examples depend on the Less Power framework being installed. LP is currently fixed to OCaml 5.1.1. Hence, from an OCaml 5.1.1. switch, LP can be installed using opam:
 
 ```bash
 opam pin add less-power https://github.com/just-max/less-power.git#main
