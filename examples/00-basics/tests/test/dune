@@ -9,7 +9,6 @@
   str
   assignment
   solution
-  overrides
   unix))
 
 (executable

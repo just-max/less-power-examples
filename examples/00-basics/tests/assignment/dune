@@ -1,6 +1,8 @@
 (library
  (name assignment)
  (preprocess (pps less-power.ast-check-ppx))
- (libraries overrides less-power.stdlib-variants)
+ (libraries less-power.stdlib-alerts)
  (flags
-  (:standard -open Overrides.Stdlib -nopervasives)))
+  (:standard -w -A
+   -nopervasives -open Stdlib_alerts.Stdlib_alerting
+   -alert -all@physical_eq@input_output@impure@unsafe)))
